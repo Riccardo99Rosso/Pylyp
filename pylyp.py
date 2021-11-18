@@ -24,7 +24,6 @@ def print_instructions():
 l = len(sys.argv)
 
 if l == 1:
-    print("ciao")
     cmd = f'start cmd.exe @cmd /k python'
     os.system(cmd)
     

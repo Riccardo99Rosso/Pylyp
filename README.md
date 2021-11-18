@@ -4,11 +4,11 @@ Python ... but reversible
 Descrizione in italiano:
 #### Capitolo 1: Analizzatore
 
-Cominciamo con la creazione di una nuova cartella in cpython dal nome Pylyp (nome scelto per il progetto) e creiamo il file pylyp.py come file che accetta un file in entrata (il codice da analizzare).
+Cominciamo con la creazione di una nuova cartella in cpython dal nome `Pylyp` (nome scelto per il progetto) e creiamo il file `pylyp.py` come file che accetta un file in entrata (il codice da analizzare).
 Una volta salvato il contenuto dell'argomento in una variabile code effettuiamo una prima analisi andando a controllare che le variabili delle varie funzioni non siano globali. E' infatti necessario che le funzioni siano chiuse (una funzione non chiusa è per definizione non reversibile).
 Per fare ciò sfruttiamo un altro modulo particolarmente utile: symtable.
 Tale modulo è stato creato con l'idea di dare allo sviluppatore la possibilità di accedere facilmente alla symbol table andando, per ogni funzione, classe ... presente, a visualizzare le variabili e il loro scope.
-Il codice di pylyp.py fino a questo momento risulta quindi essere:
+Il codice di `pylyp.py` fino a questo momento risulta quindi essere:
 
 ```python
 import sys
@@ -311,7 +311,15 @@ output = compile(tree_ast, sys.argv[1],'exec')
 exec(output)
 ```
 
+A questo punto l'unica cosa che rimane da fare è l'aggiunta di argomenti condizionali di compilazione.
+Momentaneamente i comandi sono i seguenti:
 
+```
+-debug (o -d): "Mostrare i punti di non reversibilità delle funzioni"
+-visualize (or -v): "Mostrare l'AST del codice"
+```
+
+Inoltre aggiungiamo la possibilità di chiamare `pylyp` senza nessuno script al seguito (questa chiamata equivale alla chiamata `python`).
 
 #### Capitolo 2: Creazione di un nuovo comando di compilazione
 
@@ -340,81 +348,40 @@ Prima di lavorare sul setup modifichiamo il nome di pylyp.py in pylyp_parser.py 
 
 all'inizio del nostro file, in modo da definire dove si trova l'interprete.
 
-Su sistemi basati su Unix la procedura risulta piuttosto semplice perciò inizieremo dalla costruzione del comando in Windows.
+Cominciamo con la procedura per sistemi Windows.
 
 
 
 ##### Capitolo 2.1: Setup per il comando su Windows
 
-Creiamo inizialmente uno script w_setpylyp.py che conterrà uno script che l'utente dovrà chiamare per installare il comando.
-Immaginando che in pylyppath.py si trovi uno script capace di lavorare sul comando pylyp andando a definire quale sia il path assoluto di pylyp_parser (sconsigliato a causa di possibili instabilità utilizzare un path relativo) andiamo a definire **w_setpylyp.py** in questo modo:
+Creiamo uno script che generi un eseguibile (in modo da poter chiamare `pylyp` senza l'ausilio del comando `python`).
+Il codice risulta minimale:
 
 ```python
 import os
-import pylyppath
-
-print("Path setting of pylyp_parser.py")
-print("...")
-pylyppath.setpath()
 
 print("Installing pyinstaller")
 print("...")
 os.system("pip install pyinstaller")
 
 print("Creating pylyp.exe")
-os.system("pyinstaller --onefile --exclude-module _bootlocale pylyp.py")
+print("...")
+os.system("pyinstaller --onefile --exclude-module _bootlocale pylyp.py"
 ```
 
-Questo script andrà a creare in una nuova cartella `dist` l'eseguibile pylyp.exe (`--exclude-module _bootlocale` è un flag necessario dalla versione 3.10 di Python).
+Ciò che fa è semplicemente installare pyinstaller all'interno del proprio terminale (se questo non fosse già installato)
+e va a creare un eseguibile "`pylyp.exe`" all'interno di una cartella `dist`.
+Il comando `--onefile --exclude-module _bootlocale` risulta necessario da versioni Python 3.10+
 
-**pylyppath.py** viene invece definito in questo modo:
 
-```python
-import os
-import fileinput
-
-def setpath():
-    current_path = os.getcwd()
-    pylyp_parser = current_path + "\pylyp_parser.py"
-    with open("pylyp.py") as f:
-        lines = f.read()
-    lines = lines.split("\n")
-    lines[0] = "pylyp_parser = " + "r\"" + pylyp_parser + "\""
-    lines = "\n".join(lines)
-    with open("pylyp.py", "w") as f:
-        f.write(lines) 
-```
-
-E andrà semplicemente a caricare il path assoluto di pylyp_parser.py in una variabile pylyp_parser, andando poi a caricare tale variabile in pylyp.py.
-Infine **pylyp.py**:
-
-```python
-pylyp_parser = r"C:\Users\Utente\Desktop\UNI\Stage\cpython\Pylyp\pylyp_parser.py"
-#don't touch the line above
-
-import sys
-import os
-
-if len(sys.argv) != 2:
-    print("This script needs a file.py as an argument")
-    sys.exit(0)
-
-os.system("python " + pylyp_parser + " " + sys.argv[1])
-```
-
-Lo script, che sarà poi l'eseguibile, andrà a chiamare automaticamente 
-
-`python path(pylyp_parser.py) sys.argv[1]` quando verrà evocato.
-
-Ora definiamo cosa dovrà in pratica fare l'utente che sfrutta una macchina Windows nel momento in cui vorrà usare il pylyp_parser.
 
 **Guida setup per Windows**
 
-- Scaricare la cartella Pylyp in una locazione definitiva (pena il risetup)
+- Scaricare la cartella Pylyp
 
 - Entrare nella cartella Pylyp e, da terminale scrivere
 
-  > python w_setpylyp.py
+  > python win_setpylyp.py
 
 - Entrare nella cartella `dist` appena creata e copiare il path
 - Inserire tale locazione nelle variabili d'ambiente in path
@@ -430,36 +397,50 @@ in qualsiasi posizione all'interno del proprio calcolatore per eseguire codici P
 
 ##### Capitolo 2.2: Setup per il comando su sistemi Unix
 
-Per facilitare la questione su questi sistemi non useremo pylyp come comando ma pylyp_parser.py direttamente.
-Per fare ciò basterà rendere eseguibile pylyp_parser.py.
+Per facilitare la questione su questi sistemi non useremo `pylyp` come comando ma `pylyp.py` direttamente.
+Per fare ciò basterà rendere eseguibile `pylyp_parser.py`.
+
+Creiamo quindi lo script:
+
+```python
+import os
+
+print("Making pylyp.py executable")
+print("...")
+os.system('chmod +x pylyp.py')
+```
+
+che va a rendere eseguibile `pylyp.py` (permettendo l'omissione del comando `python`).
+
+
 
 **Guida setup per Unix**
 
-- Scaricare la cartella Pylyp in una locazione definitiva (pena il risetup)
+- Scaricare la cartella Pylyp
 
 - Entrare nella cartella Pylyp e, da terminale scrivere
 
   > ```
-  > chmod +x pylyp_parser.py
+  > python ux_setpylyp.py
   > ```
 
 - Inserire il path della cartella Pylyp nelle variabili d'ambiente
 
 Da questo momento in avanti l'utente potrà usare 
 
-> ./pylyp_parser.py <codice>
+> ./pylyp.py <codice>
 
 in qualsiasi posizione all'interno del proprio calcolatore per eseguire codici Python ed effettuare un'analisi della reversibilità.
 
+##### Capitolo 2.3: Comandi condizionali di compilazione
 
-#### Capitolo 3: Conclusioni finali
+Il comando pylyp per ora sottostà alle seguenti regole:
 
-Dopo aver effettuato il push dei cambiamenti effettuati nel repository cpython creiamo un nuovo repository dal nome Pylyp nel quale andremo ad inserire solo la directory Pylyp in modo da trattare il progetto come un lavoro a se.
-
-I setup creati sono solo momentanei, si spera che in seguito questi verranno sostituiti da installer appositi per ogni sistema operativo.
-Le potenzialità di Pylyp risiedono nella futura implementazione di algoritmi volti a trovare le inverse delle funzioni reversibili e, nei casi in cui la funzione di partenza non fosse reversibile, a calcolare una funzioni equivalenti reversibili.
-
-Ringrazio il professor Luca Roversi per avermi permesso di lavorare a questo interessante progetto. 
-																																		
-
-​																																				Riccardo Giovanni Rosso.
+```
+usage: pylyp [code.py] [options]
+options:
+-debug (or -d):       Show errors on non-reversible instructions
+-visualize (or -v):   Show the AST
+Using 'pylyp' command without any code or options is the equivalent
+of calling the 'python' command
+```

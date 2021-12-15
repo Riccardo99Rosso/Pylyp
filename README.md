@@ -415,7 +415,7 @@ che va a rendere eseguibile `pylyp.py` (permettendo l'omissione del comando `pyt
 
 
 **Guida setup per Unix**
-
+(Pre-condizione: avere python come alias di python3)
 - Scaricare la cartella Pylyp
 
 - Entrare nella cartella Pylyp e, da terminale scrivere

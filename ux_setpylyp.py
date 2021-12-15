@@ -1,9 +1,5 @@
 import os
 
-print("Installing pyinstaller")
+print("Making pylyp.py executable")
 print("...")
-os.system("pip install pyinstaller")
-
-print("Creating pylyp.exe")
-print("...")
-os.system("pyinstaller --onefile --exclude-module _bootlocale pylyp.py")
+os.system('chmod +x pylyp.py')

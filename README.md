@@ -422,13 +422,14 @@ che va a rendere eseguibile `pylyp.py` (permettendo l'omissione del comando `pyt
 
   > ```
   > python ux_setpylyp.py
+  > mv pylyp.py pylyp
   > ```
 
 - Inserire il path della cartella Pylyp nelle variabili d'ambiente
 
 Da questo momento in avanti l'utente potrà usare 
 
-> ./pylyp.py <codice>
+> pylyp <codice>
 
 in qualsiasi posizione all'interno del proprio calcolatore per eseguire codici Python ed effettuare un'analisi della reversibilità.
 

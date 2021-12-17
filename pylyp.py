@@ -74,7 +74,7 @@ else:
     fun_count = 0
     super_nodes = [node for node in ast.walk(tree_ast)]
     print()
-    print("---")
+    print("<pylyp>")
     for super_n in super_nodes:
         if isinstance(super_n, ast.FunctionDef):
             is_reversible = True
@@ -233,7 +233,7 @@ else:
             print("Function:", super_n.name,", reversibility: ", is_reversible)
             print("-")
             fun_count += 1
-    print("---")
+    print("</pylyp>")
     print()
     tree = ast.dump(tree_ast, indent=4)
     if visualize:

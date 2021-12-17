@@ -51,7 +51,8 @@ else:
     rev_functions = ["range"]
 
     tree_ast = ast.parse(code, mode="exec")
-
+    print()
+    print("<pylyp>")
     st1 = symtable.symtable(code, 'sym_table', 'exec')
     sub_st1 = st1.get_children()
     fun_size = 0
@@ -73,8 +74,7 @@ else:
 
     fun_count = 0
     super_nodes = [node for node in ast.walk(tree_ast)]
-    print()
-    print("<pylyp>")
+  
     for super_n in super_nodes:
         if isinstance(super_n, ast.FunctionDef):
             is_reversible = True
@@ -237,9 +237,9 @@ else:
     print()
     tree = ast.dump(tree_ast, indent=4)
     if visualize:
-        print("---")
+        print("<ast>")
         print(tree)
-        print("---\n")
+        print("</ast>\n")
     
     output = compile(tree_ast, sys.argv[1],'exec')
     exec(output)

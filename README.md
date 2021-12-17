@@ -408,9 +408,10 @@ import os
 print("Making pylyp.py executable")
 print("...")
 os.system('chmod +x pylyp.py')
+os.system('mv pylyp.py pylyp')
 ```
 
-che va a rendere eseguibile `pylyp.py` (permettendo l'omissione del comando `python`).
+che va a rendere eseguibile `pylyp` (permettendo l'omissione del comando `python`).
 
 
 
@@ -422,7 +423,6 @@ che va a rendere eseguibile `pylyp.py` (permettendo l'omissione del comando `pyt
 
   > ```
   > python ux_setpylyp.py
-  > mv pylyp.py pylyp
   > ```
 
 - Inserire il path della cartella Pylyp nelle variabili d'ambiente

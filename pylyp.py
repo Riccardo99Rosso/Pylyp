@@ -74,7 +74,7 @@ else:
 
     fun_count = 0
     super_nodes = [node for node in ast.walk(tree_ast)]
-  
+  print()
     for super_n in super_nodes:
         if isinstance(super_n, ast.FunctionDef):
             is_reversible = True

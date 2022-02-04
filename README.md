@@ -5,7 +5,7 @@ Descrizione in italiano:
 
 ## Capitolo 1: Sintesi del progetto
 
-I codici qua descritti sono frutto del progetto di tesi triennale al dipartimento di informatica UNITO dell'anno 2021/2022, elaborato da Riccardo Giovanni Rosso (studente) e Luca Roversi (relatore).
+I codici qua descritti sono frutto del progetto di tesi triennale al dipartimento di informatica UNITO dell'anno 2020/2021, elaborato da Riccardo Giovanni Rosso (studente) e Luca Roversi (relatore).
 L'idea che sta alla base del lavoro è la costruzione di un sistema di analisi di porzioni di codice reversibile scritto in Python.
 Questa struttura ha inoltre l'intenzione di essere estendibile, sfruttando la catena di compilazione dell'implementazione Cpython di Python qua sotto visibile.
 
